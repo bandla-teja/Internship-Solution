@@ -1,0 +1,59 @@
+
+Step 1: Launch 5 ubuntu 18.04 servers in AWS
+
+Step2: Add the Same User in all ubuntu servers
+          1) Add User "teja" and then enter & retype the new unix password for that user
+                   $ sudo adduser teja
+                       Enter new UNIX password:teja
+                       Retype new UNIX password:teja
+
+         2) Switch to root 
+                  $ sudo -i
+
+         3) Give sudo permissions to that user so that they can execute any command
+                  # visudo
+                  -----> Add this line {  teja  ALL=(ALL:ALL) ALL  }
+
+         4) Go to sshd_config file and change PasswordAuthentication as "yes"
+                  # nano /etc/ssh/sshd_config
+                  -----> change PasswordAuthentication as yes
+
+         5) Restart ssh service
+                  # service ssh restart
+
+         6) To access user "teja", type the below command
+                  # ssh teja@localhost
+
+         7) It will display like below after getting into user "teja" mode
+                 teja@ip-172-31-34-193:~$ 
+
+Step 3: Give hostnames to 5 ubuntu servers such as
+                 # hostname first-server
+                 # hostname second-server
+                 # hostname third-server
+                 # hostname fourth-server
+                 # hostname fifth-server
+
+Step 4: Generate key in the first-server and then copy that key to all other servers. So that it will not ask for password while access the user.
+
+      1) To access user "teja", type below command
+                # su - teja
+
+      2) Generate key
+               $ ssh-keygen
+
+      3) Copy key to all other 4 ubuntu servers by using the following command...
+               $ ssh-copy-id teja@ip-172-31-35-39.us-east-2.compute.internal
+
+      4) To access the user of one server to another server without using host name....
+               $ ssh ip-172-31-35-39.us-east-2.compute.internal 
+
+      5) To access the user of one server to another server by using host name ....
+
+              a) Add ipaddresses and hostnames of all servers in /etc/hosts
+
+              b) To access the user in another server....
+                   $ ssh second-server
+                          (or)
+                   $ ssh third-server
+
